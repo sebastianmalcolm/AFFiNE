@@ -194,7 +194,7 @@ __metadata:
     lucide-react: "npm:^0.408.0"
     next-themes: "npm:^0.3.0"
     react: "npm:^18.3.1"
-    react-day-picker: "npm:^8.10.1"
+    react-day-picker: "npm:^9.0.0"
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.52.0"
     react-resizable-panels: "npm:^2.0.19"
@@ -32954,13 +32954,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:^8.10.1":
-  version: 8.10.1
-  resolution: "react-day-picker@npm:8.10.1"
+"react-day-picker@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "react-day-picker@npm:9.0.0"
+  dependencies:
+    date-fns: "npm:^3.6.0"
   peerDependencies:
-    date-fns: ^2.28.0 || ^3.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10/374056dca7fed70a154a3b0e98c6c746c26b4fc868548fa8f285ef3cab9679537e84c0c21ba7b6db67b3f7f54cc562f5d83efba2c7f2c7bd3705ac8992869607
+    react: ">=16.8.0"
+  checksum: 10/76ae1bc9c503881ae242d556a6e732cb627d909a84f1df4ab518cea7b296cb8b7d6672e4e69527137e735a5891c8b054ff72b360d2eecb0ad0cb3fc71894e68f
   languageName: node
   linkType: hard
 
