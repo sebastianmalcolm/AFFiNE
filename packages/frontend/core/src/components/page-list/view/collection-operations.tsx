@@ -1,5 +1,5 @@
 import type { MenuItemProps } from '@affine/component';
-import { Menu, MenuIcon, MenuItem } from '@affine/component';
+import { Menu, MenuItem } from '@affine/component';
 import { useAppSettingHelper } from '@affine/core/hooks/affine/use-app-setting-helper';
 import { useDeleteCollectionInfo } from '@affine/core/hooks/affine/use-delete-collection-info';
 import { CompatibleFavoriteItemsAdapter } from '@affine/core/modules/properties';
@@ -17,6 +17,7 @@ import {
   SplitViewIcon,
 } from '@blocksuite/icons/rc';
 import { useLiveData, useService } from '@toeverything/infra';
+import { cssVar } from '@toeverything/theme';
 import type { PropsWithChildren, ReactElement } from 'react';
 import { useCallback, useMemo } from 'react';
 
@@ -113,45 +114,29 @@ export const CollectionOperations = ({
   >(
     () => [
       {
-        icon: (
-          <MenuIcon>
-            <EditIcon />
-          </MenuIcon>
-        ),
+        icon: <EditIcon />,
         name: t['com.affine.collection.menu.rename'](),
         click: showEditName,
       },
       {
-        icon: (
-          <MenuIcon>
-            <FilterIcon />
-          </MenuIcon>
-        ),
+        icon: <FilterIcon />,
         name: t['com.affine.collection.menu.edit'](),
         click: showEdit,
       },
       ...(onAddDocToCollection
         ? [
             {
-              icon: (
-                <MenuIcon>
-                  <PlusIcon />
-                </MenuIcon>
-              ),
+              icon: <PlusIcon />,
               name: t['New Page'](),
               click: onAddDocToCollection,
             },
           ]
         : []),
       {
-        icon: (
-          <MenuIcon>
-            {favorite ? (
-              <FavoritedIcon style={{ color: 'var(--affine-primary-color)' }} />
-            ) : (
-              <FavoriteIcon />
-            )}
-          </MenuIcon>
+        icon: favorite ? (
+          <FavoritedIcon style={{ color: cssVar('primaryColor') }} />
+        ) : (
+          <FavoriteIcon />
         ),
         name: favorite
           ? t['com.affine.favoritePageOperation.remove']()
@@ -159,22 +144,14 @@ export const CollectionOperations = ({
         click: onToggleFavoritePage,
       },
       {
-        icon: (
-          <MenuIcon>
-            <OpenInNewIcon />
-          </MenuIcon>
-        ),
+        icon: <OpenInNewIcon />,
         name: t['com.affine.workbench.tab.page-menu-open'](),
         click: openCollectionNewTab,
       },
       ...(appSettings.enableMultiView
         ? [
             {
-              icon: (
-                <MenuIcon>
-                  <SplitViewIcon />
-                </MenuIcon>
-              ),
+              icon: <SplitViewIcon />,
               name: t['com.affine.workbench.split-view.page-menu-open'](),
               click: openCollectionSplitView,
             },
@@ -184,11 +161,7 @@ export const CollectionOperations = ({
         element: <div key="divider" className={styles.divider}></div>,
       },
       {
-        icon: (
-          <MenuIcon>
-            <DeleteIcon />
-          </MenuIcon>
-        ),
+        icon: <DeleteIcon />,
         name: t['Delete'](),
         click: () => {
           service.deleteCollection(deleteInfo, collection.id);
@@ -227,7 +200,7 @@ export const CollectionOperations = ({
                   data-testid="collection-option"
                   key={action.name}
                   type={action.type}
-                  preFix={action.icon}
+                  prefixIcon={action.icon}
                   onClick={action.click}
                 >
                   {action.name}

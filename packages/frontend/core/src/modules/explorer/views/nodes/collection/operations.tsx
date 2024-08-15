@@ -1,6 +1,5 @@
 import {
   IconButton,
-  MenuIcon,
   MenuItem,
   MenuSeparator,
   useConfirmModal,
@@ -22,6 +21,7 @@ import {
   SplitViewIcon,
 } from '@blocksuite/icons/rc';
 import { DocsService, useLiveData, useServices } from '@toeverything/infra';
+import { cssVar } from '@toeverything/theme';
 import { useCallback, useMemo } from 'react';
 
 import type { NodeOperation } from '../../tree/types';
@@ -135,14 +135,7 @@ export const useExplorerCollectionNodeOperations = (
       {
         index: 99,
         view: (
-          <MenuItem
-            preFix={
-              <MenuIcon>
-                <FilterIcon />
-              </MenuIcon>
-            }
-            onClick={handleShowEdit}
-          >
+          <MenuItem prefixIcon={<FilterIcon />} onClick={handleShowEdit}>
             {t['com.affine.collection.menu.edit']()}
           </MenuItem>
         ),
@@ -151,11 +144,7 @@ export const useExplorerCollectionNodeOperations = (
         index: 99,
         view: (
           <MenuItem
-            preFix={
-              <MenuIcon>
-                <PlusIcon />
-              </MenuIcon>
-            }
+            prefixIcon={<PlusIcon />}
             onClick={handleAddDocToCollection}
           >
             {t['New Page']()}
@@ -166,16 +155,12 @@ export const useExplorerCollectionNodeOperations = (
         index: 99,
         view: (
           <MenuItem
-            preFix={
-              <MenuIcon>
-                {favorite ? (
-                  <FavoritedIcon
-                    style={{ color: 'var(--affine-primary-color)' }}
-                  />
-                ) : (
-                  <FavoriteIcon />
-                )}
-              </MenuIcon>
+            prefixIcon={
+              favorite ? (
+                <FavoritedIcon style={{ color: cssVar('primaryColor') }} />
+              ) : (
+                <FavoriteIcon />
+              )
             }
             onClick={handleToggleFavoriteCollection}
           >
@@ -188,14 +173,7 @@ export const useExplorerCollectionNodeOperations = (
       {
         index: 99,
         view: (
-          <MenuItem
-            preFix={
-              <MenuIcon>
-                <OpenInNewIcon />
-              </MenuIcon>
-            }
-            onClick={handleOpenInNewTab}
-          >
+          <MenuItem prefixIcon={<OpenInNewIcon />} onClick={handleOpenInNewTab}>
             {t['com.affine.workbench.tab.page-menu-open']()}
           </MenuItem>
         ),
@@ -206,11 +184,7 @@ export const useExplorerCollectionNodeOperations = (
               index: 99,
               view: (
                 <MenuItem
-                  preFix={
-                    <MenuIcon>
-                      <SplitViewIcon />
-                    </MenuIcon>
-                  }
+                  prefixIcon={<SplitViewIcon />}
                   onClick={handleOpenInSplitView}
                 >
                   {t['com.affine.workbench.split-view.page-menu-open']()}
@@ -228,11 +202,7 @@ export const useExplorerCollectionNodeOperations = (
         view: (
           <MenuItem
             type={'danger'}
-            preFix={
-              <MenuIcon>
-                <DeleteIcon />
-              </MenuIcon>
-            }
+            prefixIcon={<DeleteIcon />}
             onClick={handleDeleteCollection}
           >
             {t['Delete']()}

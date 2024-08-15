@@ -1,10 +1,4 @@
-import {
-  IconButton,
-  MenuIcon,
-  MenuItem,
-  MenuSeparator,
-  toast,
-} from '@affine/component';
+import { IconButton, MenuItem, MenuSeparator, toast } from '@affine/component';
 import { useAppSettingHelper } from '@affine/core/hooks/affine/use-app-setting-helper';
 import { track } from '@affine/core/mixpanel';
 import { FavoriteService } from '@affine/core/modules/favorite';
@@ -20,6 +14,7 @@ import {
   SplitViewIcon,
 } from '@blocksuite/icons/rc';
 import { DocsService, useLiveData, useServices } from '@toeverything/infra';
+import { cssVar } from '@toeverything/theme';
 import { useCallback, useMemo } from 'react';
 
 import type { NodeOperation } from '../../tree/types';
@@ -102,14 +97,7 @@ export const useExplorerTagNodeOperations = (
       {
         index: 50,
         view: (
-          <MenuItem
-            preFix={
-              <MenuIcon>
-                <OpenInNewIcon />
-              </MenuIcon>
-            }
-            onClick={handleOpenInNewTab}
-          >
+          <MenuItem prefixIcon={<OpenInNewIcon />} onClick={handleOpenInNewTab}>
             {t['com.affine.workbench.tab.page-menu-open']()}
           </MenuItem>
         ),
@@ -120,11 +108,7 @@ export const useExplorerTagNodeOperations = (
               index: 100,
               view: (
                 <MenuItem
-                  preFix={
-                    <MenuIcon>
-                      <SplitViewIcon />
-                    </MenuIcon>
-                  }
+                  prefixIcon={<SplitViewIcon />}
                   onClick={handleOpenInSplitView}
                 >
                   {t['com.affine.workbench.split-view.page-menu-open']()}
@@ -137,16 +121,12 @@ export const useExplorerTagNodeOperations = (
         index: 199,
         view: (
           <MenuItem
-            preFix={
-              <MenuIcon>
-                {favorite ? (
-                  <FavoritedIcon
-                    style={{ color: 'var(--affine-primary-color)' }}
-                  />
-                ) : (
-                  <FavoriteIcon />
-                )}
-              </MenuIcon>
+            prefixIcon={
+              favorite ? (
+                <FavoritedIcon style={{ color: cssVar('primaryColor') }} />
+              ) : (
+                <FavoriteIcon />
+              )
             }
             onClick={handleToggleFavoriteTag}
           >
@@ -165,11 +145,7 @@ export const useExplorerTagNodeOperations = (
         view: (
           <MenuItem
             type={'danger'}
-            preFix={
-              <MenuIcon>
-                <DeleteIcon />
-              </MenuIcon>
-            }
+            prefixIcon={<DeleteIcon />}
             onClick={handleMoveToTrash}
           >
             {t['Delete']()}

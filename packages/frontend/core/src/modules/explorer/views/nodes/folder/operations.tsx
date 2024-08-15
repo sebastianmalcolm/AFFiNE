@@ -1,4 +1,4 @@
-import { MenuIcon, MenuItem } from '@affine/component';
+import { MenuItem } from '@affine/component';
 import { CompatibleFavoriteItemsAdapter } from '@affine/core/modules/properties';
 import { useI18n } from '@affine/i18n';
 import { FavoritedIcon, FavoriteIcon } from '@blocksuite/icons/rc';
@@ -20,14 +20,12 @@ export const FavoriteFolderOperation = ({ id }: { id: string }) => {
 
   return (
     <MenuItem
-      preFix={
-        <MenuIcon>
-          {favorite ? (
-            <FavoritedIcon style={{ color: cssVar('primaryColor') }} />
-          ) : (
-            <FavoriteIcon />
-          )}
-        </MenuIcon>
+      prefixIcon={
+        favorite ? (
+          <FavoritedIcon style={{ color: cssVar('primaryColor') }} />
+        ) : (
+          <FavoriteIcon />
+        )
       }
       onClick={() => compatibleFavoriteItemsAdapter.toggle(id, 'folder')}
     >
