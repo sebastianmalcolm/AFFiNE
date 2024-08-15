@@ -53,7 +53,7 @@ services:
     restart: unless-stopped
     volumes:
     #  - ~/.affine/self-host/postgres:/var/lib/postgresql/data
-      - affine-postgres:/var/lib/postgresql/data
+      - affine-postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U affine']
       interval: 10s
