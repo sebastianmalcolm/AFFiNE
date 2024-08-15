@@ -193,3 +193,53 @@ jobs:
           STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
           STRIPE_WEBHOOK_KEY: ${{ secrets.STRIPE_WEBHOOK_KEY }}
           STATIC_IP_NAME: ${{ secrets.STATIC_IP_NAME }}
+
+  deploy-done:
+    needs:
+      - build-frontend-image
+      - build-server-image
+      - deploy
+    if: always()
+    runs-on: ubuntu-latest
+    name: Post deploy message
+    steps:
+      - name: Output deployed url
+        if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+        id: set_url
+        run: |
+          if [ "${{ github.event.inputs.flavor }}" = "canary" ]; then
+            echo "deployed_url=https://affine.fail" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.inputs.flavor }}" = "beta" ]; then
+            echo "deployed_url=https://insider.affine.pro" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.inputs.flavor }}" = "stable" ]; then
+            echo "deployed_url=https://app.affine.pro" >> $GITHUB_OUTPUT
+          else
+            exit 1
+          fi
+      - name: Post Failed event to a Slack channel
+        id: success-slack
+        uses: slackapi/slack-github-action@v1.26.0
+        if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+        with:
+          channel-id: ${{ secrets.RELEASE_SLACK_CHNNEL_ID }}
+          slack-message: '[Backend deployed in `${{ github.event.inputs.flavor }}`](${{ steps.set_url.outputs.deployed_url }})'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      - name: Post Failed event to a Slack channel
+        id: failed-slack
+        uses: slackapi/slack-github-action@v1.26.0
+        if: ${{ always() && contains(needs.*.result, 'failure') }}
+        with:
+          channel-id: ${{ secrets.RELEASE_SLACK_CHNNEL_ID }}
+          slack-message: '[Backend deploy failed `${{ github.event.inputs.flavor }}`](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      - name: Post Cancel event to a Slack channel
+        id: cancel-slack
+        uses: slackapi/slack-github-action@v1.26.0
+        if: ${{ always() && contains(needs.*.result, 'cancelled') }}
+        with:
+          channel-id: ${{ secrets.RELEASE_SLACK_CHNNEL_ID }}
+          slack-message: '[Backend deploy canceld `${{ github.event.inputs.flavor }}`](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
