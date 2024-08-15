@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useActiveBlocksuiteEditor } from '../use-block-suite-editor';
 
-type UrlType = 'share' | 'workspace';
+type UrlType = 'public' | 'private';
 
 type UseSharingUrl = {
   workspaceId: string;
@@ -20,7 +20,6 @@ type UseSharingUrl = {
 const generateUrl = ({
   workspaceId,
   pageId,
-  urlType,
   blockId,
   shareView,
 }: UseSharingUrl & { blockId?: string }) => {
@@ -33,7 +32,7 @@ const generateUrl = ({
 
   try {
     return new URL(
-      `${baseUrl}/${urlType}/${workspaceId}/${pageId}${shareView ? `?view=${shareView}` : ''}${urlType === 'workspace' && blockId ? `#${blockId}` : ''}`
+      `${baseUrl}/workspace/${workspaceId}/${pageId}${shareView ? `?view=${shareView}` : ''}${blockId ? `#${blockId}` : ''}`
     ).toString();
   } catch (e) {
     return null;
@@ -70,7 +69,7 @@ export const useSharingUrl = ({
             console.error(err);
           });
         track.$.sharePanel.$.copyShareLink({
-          type: urlType === 'share' ? 'public' : 'private',
+          type: urlType,
         });
       } else {
         notify.error({
@@ -84,7 +83,7 @@ export const useSharingUrl = ({
   useEffect(() => {
     let disposable: Disposable | null = null;
     const selectManager = editor?.host?.selection;
-    if (urlType !== 'workspace' || !selectManager) {
+    if (!selectManager) {
       return;
     }
 

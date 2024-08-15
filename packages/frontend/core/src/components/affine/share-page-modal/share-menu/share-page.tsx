@@ -105,6 +105,7 @@ export const AFFiNESharePage = (props: ShareMenuProps) => {
       return;
     }
     try {
+      // TODO(@JimmFly): remove mode when we have a better way to handle it
       await shareService.share.enableShare(
         mode === 'edgeless' ? PublicPageMode.Edgeless : PublicPageMode.Page
       );
@@ -175,45 +176,18 @@ export const AFFiNESharePage = (props: ShareMenuProps) => {
 
   const isMac = environment.isBrowser && environment.isMacOs;
 
-  const onShareModeChange = useAsyncCallback(
-    async (value: DocMode) => {
-      try {
-        if (isSharedPage) {
-          await shareService.share.changeShare(
-            value === 'edgeless' ? PublicPageMode.Edgeless : PublicPageMode.Page
-          );
-        }
-      } catch (err) {
-        notify.error({
-          title:
-            t[
-              'com.affine.share-menu.confirm-modify-mode.notification.fail.title'
-            ](),
-          message:
-            t[
-              'com.affine.share-menu.confirm-modify-mode.notification.fail.message'
-            ](),
-        });
-        console.error(err);
-      }
-    },
-    [isSharedPage, shareService.share, t]
-  );
-
   const { onClickCopyLink } = useSharingUrl({
     workspaceId,
     pageId: editor.doc.id,
-    urlType: 'share',
+    urlType: isSharedPage ? 'public' : 'private',
   });
 
   const onCopyPageLink = useCallback(() => {
-    onShareModeChange('page');
     onClickCopyLink('page');
-  }, [onClickCopyLink, onShareModeChange]);
+  }, [onClickCopyLink]);
   const onCopyEdgelessLink = useCallback(() => {
-    onShareModeChange('edgeless');
     onClickCopyLink('edgeless');
-  }, [onClickCopyLink, onShareModeChange]);
+  }, [onClickCopyLink]);
   const onCopyBlockLink = useCallback(() => {
     // TODO(@JimmFly): handle frame
     onClickCopyLink(currentDocMode);
